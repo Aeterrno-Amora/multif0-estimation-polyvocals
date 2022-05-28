@@ -10,20 +10,20 @@ import pandas as pd
 
 '''Paths
 '''
-audio_save_folder = '/scratch/hc2945/data/audiomixtures/'
-data_save_folder = '/scratch/hc2945/data/features_targets/'
-exper_output = '/scratch/hc2945/data/experiment_output/'
+audio_save_folder = '/root/multif0-estimation-polyvocals/data/'
+data_save_folder = '/root/multif0-estimation-polyvocals/features/'
+exper_output = '/root/multif0-estimation-polyvocals/experiment_output/'
 
 
 # audio folders
-csd_folder = '/scratch/hc2945/data/CSD/'
-ecs_folder = '/scratch/hc2945/data/ECS/'
-dcs_folder_audio = '/scratch/hc2945/data/DCS/audio_wav_22050_mono/'
-dcs_folder_annot = '/scratch/hc2945/data/DCS/annotations_csv_F0_PYIN/'
-bc_folder_audio = '/scratch/hc2945/data/BachChorales/BC/'
-bc_folder_annot = '/scratch/hc2945/data/BachChorales/BC/pyin_annot/constant_timebase/'
-bsq_folder_audio = '/scratch/hc2945/data/BarbershopQuartets/BQ/'
-bsq_folder_annot = '/scratch/hc2945/data/BarbershopQuartets/BQ/pyin_annot/constant_timebase'
+csd_folder = '/root/multif0-estimation-polyvocals/data/ChoralSingingDataset/'
+ecs_folder = '/root/multif0-estimation-polyvocals/data/EsmucChoirDataset_v1.0.0'
+dcs_folder_audio = '/root/multif0-estimation-polyvocals/data/DagstuhlChoirSet_V1.2.3/audio_wav_22050_mono/'
+dcs_folder_annot = '/root/multif0-estimation-polyvocals/data/DagstuhlChoirSet_V1.2.3/annotations_csv_F0_PYIN/'
+bc_folder_audio = None  # '/scratch/hc2945/data/BachChorales/BC/'
+bc_folder_annot = None  # '/scratch/hc2945/data/BachChorales/BC/pyin_annot/constant_timebase/'
+bsq_folder_audio = None  # '/scratch/hc2945/data/BarbershopQuartets/BQ/'
+bsq_folder_annot = None  # '/scratch/hc2945/data/BarbershopQuartets/BQ/pyin_annot/constant_timebase'
 
 
 '''All variables and parameters related to the dataset creation
@@ -222,6 +222,7 @@ for song in dcs_songs_qb:
 
 ''' Bach Chorales
 '''
+'''
 bc = pd.read_csv('/scratch/hc2945/data/BC_info.csv').values
 
 dataset['BC']['songs'] = []
@@ -236,9 +237,10 @@ for song in bc[:, 0]:
 
 dataset['BC']['singers'] = [bc[0, 1], bc[0, 2], bc[0, 3], bc[0, 4]]
 #dataset['BC']['num_parts'] = bc[:, 6]
-
+'''
 
 '''Barbershop Quartets
+'''
 '''
 bq = pd.read_csv('/scratch/hc2945/data/BQ_info.csv').values
 
@@ -254,7 +256,7 @@ for song in bq[:, 0]:
 
 dataset['BSQ']['singers'] = [bq[0, 1], bq[0, 2], bq[0, 3], bq[0, 4]]
 #dataset['BSQ']['num_parts'] = bq[:, 6]
-
+'''
 
 '''Training parameters
 '''

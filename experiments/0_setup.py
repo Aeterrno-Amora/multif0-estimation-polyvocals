@@ -11,7 +11,15 @@ import soundfile
 
 import scipy
 
-from experiments import config
+import config
+import sys
+
+pathPoint = os.path.dirname(__file__)
+while pathPoint != os.path.abspath(os.path.join(pathPoint, "..")): #判断是否到了顶级目录 /
+    pathPoint = os.path.abspath(os.path.join(pathPoint, ".."))
+    if os.path.exists(os.path.join(pathPoint, 'projectroot.py')):
+        sys.path.append(pathPoint)
+
 import utils
 
 
@@ -63,7 +71,7 @@ def create_full_dataset_mixes(dataset, mixes_wavpath, reverb=True, compute_audio
             params['audio_folder'] = config.csd_folder
             params['annot_folder'] = config.csd_folder
             params['sr'] = 44100
-            params['reverb'] = True
+            params['reverb'] = False  # originally True, controlling whether to use reverb audio for augmentation
 
             params['filenames'] = [
                 '{}_soprano_{}.wav'.format(song, combo[0]),
