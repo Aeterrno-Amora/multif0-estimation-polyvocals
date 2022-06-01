@@ -61,7 +61,7 @@ def create_full_dataset_mixes(dataset, mixes_wavpath, reverb=True, compute_audio
     mtracks = dict()
 
     # ------------ Process Choral Singing Dataset ------------ #
-
+    '''
     print("Processing Choral Singing Dataset...")
 
     for song in dataset['CSD']['songs']:
@@ -71,7 +71,7 @@ def create_full_dataset_mixes(dataset, mixes_wavpath, reverb=True, compute_audio
             params['audio_folder'] = config.csd_folder
             params['annot_folder'] = config.csd_folder
             params['sr'] = 44100
-            params['reverb'] = False  # originally True, controlling whether to use reverb audio for augmentation
+            params['reverb'] = True  # originally True, controlling whether to use reverb audio for augmentation
 
             params['filenames'] = [
                 '{}_soprano_{}.wav'.format(song, combo[0]),
@@ -105,11 +105,14 @@ def create_full_dataset_mixes(dataset, mixes_wavpath, reverb=True, compute_audio
 
 
         print("Mixtures for {} have been created.".format(song))
-
+    '''
     # ------------ Process ESMUC ChoralSet ------------ #
 
     print("Processing ESMUC Choral Dataset...")
-
+    # check filenames
+    for song in dataset['ECS']['DG_songs']:
+        for combo in dataset['ECS']['DG_combos']:
+            print(song, combo)
     # Der Greis
     for song in dataset['ECS']['DG_songs']:
         for combo in dataset['ECS']['DG_combos']:

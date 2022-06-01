@@ -15,6 +15,14 @@ import os
 import argparse
 import csv
 
+import sys
+
+pathPoint = os.path.dirname(__file__)
+while pathPoint != os.path.abspath(os.path.join(pathPoint, "..")): #判断是否到了顶级目录 /
+    pathPoint = os.path.abspath(os.path.join(pathPoint, ".."))
+    if os.path.exists(os.path.join(pathPoint, 'projectroot.py')):
+        sys.path.append(pathPoint)
+
 import utils
 
 
