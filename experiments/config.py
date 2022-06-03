@@ -68,7 +68,11 @@ dataset['CSD']['combos'] = combos
 ''' Der Greis
 '''
 
-ecs_dg = ['DG_take1', 'DG_take2', 'DG_take3_mixed', 'DG_take4_mixed']
+#ecs_dg = ['DG_take1', 'DG_take2', 'DG_take3_mixed', 'DG_take4_mixed']
+ecs_dg = []
+for dg, num in [('DG_FT_take', 4), ('DG_IS_tenors', 4), ('DG_SE_short', 4), ('DH1_FT_take', 1), ('DH1_SE_short', 2),
+                ('DH2_FT_take1', 1), ('SC1_FT_take', 3), ('SC2_FT_take', 3), ('SC3_FT_take', 2), ('WU_FT_take', 2)]:
+    ecs_dg.extend([dg + str(i) for i in range(1, num + 1)])
 
 singers_ecs_dg = [
     'S1', 'S2', 'S3', 'S4',

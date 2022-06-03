@@ -69,7 +69,7 @@ def read_annotations_f0(annot_fname, annot_path, dataset=None):
             # annotation = np.loadtxt(os.path.join(annot_path, annot_fname))
             annotation = []
             with open(os.path.join(annot_path, annot_fname), newline='\n') as f:
-                reader = csv.reader(f, delimiter='\t')
+                reader = csv.reader(f, delimiter=' ')
                 for line in reader:
                     annotation.append([float(line[0]), float(line[1])])
                 annotation = np.array(annotation)

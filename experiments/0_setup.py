@@ -109,10 +109,6 @@ def create_full_dataset_mixes(dataset, mixes_wavpath, reverb=True, compute_audio
     # ------------ Process ESMUC ChoralSet ------------ #
 
     print("Processing ESMUC Choral Dataset...")
-    # check filenames
-    for song in dataset['ECS']['DG_songs']:
-        for combo in dataset['ECS']['DG_combos']:
-            print(song, combo)
     # Der Greis
     for song in dataset['ECS']['DG_songs']:
         for combo in dataset['ECS']['DG_combos']:
