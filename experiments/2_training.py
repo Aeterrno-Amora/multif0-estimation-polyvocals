@@ -4,6 +4,13 @@ import json
 import keras
 import numpy as np
 import csv
+import sys
+
+pathPoint = os.path.dirname(__file__)
+while pathPoint != os.path.abspath(os.path.join(pathPoint, "..")): #判断是否到了顶级目录 /
+    pathPoint = os.path.abspath(os.path.join(pathPoint, ".."))
+    if os.path.exists(os.path.join(pathPoint, 'projectroot.py')):
+        sys.path.append(pathPoint)
 
 from experiments import config
 import utils
@@ -166,7 +173,7 @@ def experiment(save_key, model, data_splits_file, batch_size, active_str, muxrat
      ) = utils_train.get_paths(exper_dir, save_key)
 
 
-    model_save_path = '/scratch/hc2945/data/models/'
+    model_save_path = '/model_save/'
     if not os.path.exists(model_save_path):
         os.mkdir(model_save_path)
 
