@@ -42,7 +42,7 @@ def midi2note(file_path):   # deprecated
 
 OUTPUT_TIMESTEP = 0.011609977324263039
 
-def read_groundtruth_csv(file_paths, clip_start, clip_end):
+def read_groundtruth_csv(file_paths, clip_start, clip_end, ver='freq'):
     '''format: onset, freq, duration'''
     # 音高取40-80
     time_stamp = np.arange(clip_start, clip_end + 1) * OUTPUT_TIMESTEP # align with output
@@ -56,10 +56,14 @@ def read_groundtruth_csv(file_paths, clip_start, clip_end):
 
             for line in reader:
                 #print(line)
-                onset, freq, duration = float(line[0]), float(line[1]), float(line[2])
+                if ver == 'freq':
+                    onset, freq, duration = float(line[0]), float(line[1]), float(line[2])
+                    pitch = freq2pitch(np.abs(freq))
+                    offset = onset + duration
+                else:
+                    onset, offset, pitch = float(line[0]), float(line[1]), int(line[2])
                 l = max(int(round(onset / OUTPUT_TIMESTEP)), clip_start)
-                r = min(int(round((onset + duration) / OUTPUT_TIMESTEP)), clip_end)
-                pitch = freq2pitch(np.abs(float(freq)))
+                r = min(int(round(offset / OUTPUT_TIMESTEP)), clip_end)
                 if l < r and 40 <= pitch and pitch < 80:
                     pitch_map[pitch - 40, l:r] = 1
 
@@ -106,20 +110,34 @@ def visualize(name, title, freq_stamp, time_stamp, value, ylim, xlim=None, vmax=
     f1.clear()
 
 
+def visualize_input(name, title, file, clip_l, clip_r):
+    freq_stamp, time_stamp, Zxx = read_wav_STFT(file)
+    visualize(name, title, freq_stamp, time_stamp, Zxx*10000, (50, 800), (clip_l * OUTPUT_TIMESTEP, clip_r * OUTPUT_TIMESTEP), 200, 'gnuplot')
+
+
+def visualize_output(name, title, file, clip_l, clip_r, pitch_range=(40,80)):
+    csv_time_stamp, pitch_map = read_output_csv(file, clip_l, clip_r)
+    visualize(name, title, np.arange(40, 81), csv_time_stamp, pitch_map, pitch_range)
+
+
 if __name__ == '__main__':
     name = 'DCS_LI_FullChoir_Take02'
-    clip_l, clip_r = 8, 1064
+    clip = 8, 1064
 
-    freq_stamp, time_stamp, Zxx = read_wav_STFT(name+'_Stereo_STM.wav')
-    visualize('input.png', 'input', freq_stamp, time_stamp, Zxx*10000, (50, 800), (clip_l * OUTPUT_TIMESTEP, clip_r * OUTPUT_TIMESTEP), 200, 'gnuplot')
+    visualize_input('input.png', 'input', name+'_Stereo_STM.wav', *clip)
 
-    csv_time_stamp, pitch_map = read_groundtruth_csv([f'{name}_{part}_DYN.csv' for part in ('A2','B2','S1','T2')], clip_l, clip_r)
+    #csv_time_stamp, pitch_map = read_groundtruth_csv([f'{name}_{part}_DYN.csv' for part in ('A2','B2','S1','T2')], *clip)
+    csv_time_stamp, pitch_map = read_groundtruth_csv([f'{name}_Stereo_STM_{part}.csv' for part in 'ABST'], *clip, ver='pitch')
     visualize('ground_truth.png', 'ground truth', np.arange(40, 81), csv_time_stamp, pitch_map, (40, 80))
 
     for i in range(1, 4):
-        csv_time_stamp, pitch_map = read_output_csv(f'{name}_Stereo_STM_{i}.csv', clip_l, clip_r)
         model_name = ('Early/Deep', 'Early/Shallow', 'Late/Deep')[i-1]
-        visualize(f'output{i}.png', model_name, np.arange(40, 81), csv_time_stamp, pitch_map, (40, 80))
+        visualize_output(f'output{i}.png', model_name, f'{name}_Stereo_STM_{i}.csv', *clip)
+
+    # sandman
+    clip = 444, 1025
+    #visualize_input('sandman_input.png', 'input', 'mr_sandman.wav', *clip)
+    visualize_output('sandman_output.png', 'output', 'mr_sandman.csv', *clip, (56,74))
 
     #for i in range(128):
     #    print(i, pitch2frequency(i))
