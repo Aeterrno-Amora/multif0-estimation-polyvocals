@@ -433,7 +433,7 @@ def pitch_activations_to_mf0(pitch_activation_mat, thresh):
     times = utils.get_time_grid(pitch_activation_mat.shape[1])
 
     peak_thresh_mat = np.zeros(pitch_activation_mat.shape)
-    peaks = scipy.signal.argrelmax(pitch_activation_mat, axis=0)
+    peaks = scipy.signal.argrelmax(pitch_activation_mat, axis=0, order=3)
     peak_thresh_mat[peaks] = pitch_activation_mat[peaks]
 
     idx = np.where(peak_thresh_mat >= thresh)
